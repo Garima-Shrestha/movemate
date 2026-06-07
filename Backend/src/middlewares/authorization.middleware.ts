@@ -44,20 +44,6 @@ export const authorizedMiddleware = async(req: Request, res: Response, next: Nex
     }
 }
 
-export const adminOnlyMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    try{
-        if(req.user && req.user.role === "admin"){
-            next();
-        }else {
-            throw new HttpError(403, "Forbidden, Admins only");
-        }
-    }catch(error: Error | any){
-        return res.status(error.statusCode || 403).json(
-            { success: false, message: error.message || "Forbidden" }
-        );
-    }
-}
-
 export const driverOnlyMiddleware = (req: Request, res: Response, next: NextFunction) => {
     if (req.user && req.user.role === "driver") {
         next();

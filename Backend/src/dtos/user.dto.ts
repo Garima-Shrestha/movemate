@@ -33,10 +33,3 @@ export type LoginUserDto = z.infer<typeof LoginUserDto>;
 
 export const UpdateUserDto = UserSchema.partial();
 export type UpdateUserDto = z.infer<typeof UpdateUserDto>;
-
-
-export const VerifyDriverDto = z.object({
-    verificationStatus: z.enum(['approved', 'rejected']),
-    verificationNote: z.string().optional(),
-});
-export type VerifyDriverDto = z.infer<typeof VerifyDriverDto>;

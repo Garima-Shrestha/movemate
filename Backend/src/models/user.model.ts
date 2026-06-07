@@ -6,7 +6,7 @@ const UserSchema: Schema = new Schema ({
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true, match: [/^\d{10}$/, "Invalid phone number"]},
     password: { type: String, required: true, minLength:8 },
-    role: { type: String, enum: ["admin", "user", "driver"], default: "user"},
+    role: { type: String, enum: ["user", "driver"], default: "user"},
     accountStatus: { type: String, enum: ["active", "suspended"], default: "active" },
     imageUrl: { type: String, required: false },
     vehicleModel: { type: String, required: false },
@@ -30,16 +30,6 @@ const UserSchema: Schema = new Schema ({
             type: [Number],     // MongoDB stores as array of numbers [longitude, latitude]
         },
     },
-    licenseImageUrl: { type: String, required: false },
-    verificationStatus: {
-        type: String,
-        enum: ['pending', 'approved', 'rejected'],
-        // Only apply 'pending' fallback if this signing up is a driver
-        default: function(this: any) {
-            return this.role === 'driver' ? 'pending' : undefined;
-        }
-    },
-    verificationNote: { type: String, required: false },
 }, {
     timestamps: true,
 });
