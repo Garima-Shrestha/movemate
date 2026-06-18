@@ -25,13 +25,20 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
       role: fields[5] as String,
       accountStatus: fields[6] as String,
       imageUrl: fields[7] as String?,
+      vehicleModel: fields[8] as String?,
+      vehicleColor: fields[9] as String?,
+      numberPlate: fields[10] as String?,
+      licenseNumber: fields[11] as String?,
+      isAvailable: fields[12] as bool?,
+      location: (fields[13] as List?)?.cast<double>(),
+      vehicleType: fields[14] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AuthHiveModel obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.authId)
       ..writeByte(1)
@@ -48,7 +55,20 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
       ..write(obj.accountStatus)
       ..writeByte(7)
       ..write(obj.imageUrl)
-      ..writeByte(8);
+      ..writeByte(8)
+      ..write(obj.vehicleModel)
+      ..writeByte(9)
+      ..write(obj.vehicleColor)
+      ..writeByte(10)
+      ..write(obj.numberPlate)
+      ..writeByte(11)
+      ..write(obj.licenseNumber)
+      ..writeByte(12)
+      ..write(obj.isAvailable)
+      ..writeByte(13)
+      ..write(obj.location)
+      ..writeByte(14)
+      ..write(obj.vehicleType);
   }
 
   @override

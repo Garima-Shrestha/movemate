@@ -24,6 +24,23 @@ class AuthHiveModel extends HiveObject {
   @HiveField(7)
   final String? imageUrl;
 
+  // Driver only fields
+  @HiveField(8)
+  final String? vehicleModel;
+  @HiveField(9)
+  final String? vehicleColor;
+  @HiveField(10)
+  final String? numberPlate;
+  @HiveField(11)
+  final String? licenseNumber;
+  @HiveField(12)
+  final bool? isAvailable;
+  @HiveField(13)
+  final List<double>? location;
+  @HiveField(14)
+  final String? vehicleType;
+
+
   // Constructor
   AuthHiveModel({
     String? authId,
@@ -34,6 +51,13 @@ class AuthHiveModel extends HiveObject {
     this.role = 'user',
     this.accountStatus = 'active',
     this.imageUrl,
+    this.vehicleModel,
+    this.vehicleColor,
+    this.numberPlate,
+    this.licenseNumber,
+    this.isAvailable,
+    this.location,
+    this.vehicleType,
   }) : authId = authId ?? const Uuid().v4();
 
   // From Entity
@@ -47,6 +71,13 @@ class AuthHiveModel extends HiveObject {
       role: entity.role,
       accountStatus: entity.accountStatus,
       imageUrl: entity.imageUrl,
+      vehicleModel: entity.vehicleModel,
+      vehicleColor: entity.vehicleColor,
+      numberPlate: entity.numberPlate,
+      licenseNumber: entity.licenseNumber,
+      isAvailable: entity.isAvailable,
+      location: entity.location,
+      vehicleType: entity.vehicleType,
     );
   }
 
@@ -61,6 +92,13 @@ class AuthHiveModel extends HiveObject {
       role: role,
       accountStatus: accountStatus,
       imageUrl: imageUrl,
+      vehicleModel: vehicleModel,
+      vehicleColor: vehicleColor,
+      numberPlate: numberPlate,
+      licenseNumber: licenseNumber,
+      isAvailable: isAvailable,
+      location: location,
+      vehicleType: vehicleType,
     );
   }
 
