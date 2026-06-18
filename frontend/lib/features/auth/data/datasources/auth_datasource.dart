@@ -18,8 +18,14 @@ abstract interface class IAuthRemoteDataSource {
   Future<bool> updateProfile({
     required dynamic user,
     File? profileImage,
-    File? licenseImage,
   });
 
   Future<bool> changePassword(String oldPassword, String newPassword);
+
+  //Driver
+  Future<bool> updateAvailability(bool isAvailable);
+  Future<bool> updateDriverLocation({
+    required double latitude,
+    required double longitude,
+  });
 }

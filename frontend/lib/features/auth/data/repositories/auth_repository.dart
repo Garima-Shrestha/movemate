@@ -131,4 +131,111 @@ class AuthRepository implements IAuthRepository {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> updateProfile({
+    required AuthEntity entity,
+    File? profileImage,
+  }) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final apiModel = AuthApiModel.fromEntity(entity);
+        final result = await _authRemoteDataSource.updateProfile(
+          user: apiModel, // Replace with model mapping as your api model gets fleshed out
+          profileImage: profileImage,
+        );
+        return Right(result);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? 'Profile update failed',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      try {
+        final model = AuthHiveModel.fromEntity(entity);
+        final result = await _authLocalDataSource.updateProfile(model);
+        return Right(result);
+      } catch (e) {
+        return Left(LocalDatabaseFailure(message: e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> changePassword(String oldPassword, String newPassword) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final result = await _authRemoteDataSource.changePassword(oldPassword, newPassword);
+        return Right(result);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? 'Failed to change password',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return const Left(ApiFailure(message: "An active internet connection is required to modify account security parameters"));
+    }
+  }
+
+  // Driver
+  @override
+  Future<Either<Failure, bool>> updateAvailability(bool isAvailable,) async {
+    try {
+
+      final result =
+      await _authRemoteDataSource
+          .updateAvailability(
+        isAvailable,
+      );
+
+      return Right(result);
+
+    } on DioException catch (e) {
+
+      return Left(
+        ApiFailure(
+          message:
+          e.response?.data['message'] ??
+              'Failed to update availability',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateDriverLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+
+      final result =
+      await _authRemoteDataSource.updateDriverLocation(
+        latitude: latitude,
+        longitude: longitude,
+      );
+
+      return Right(result);
+
+    } on DioException catch (e) {
+
+      return Left(
+        ApiFailure(
+          message:
+          e.response?.data['message'] ??
+              'Failed to update driver location',
+        ),
+      );
+    }
+  }
 }
