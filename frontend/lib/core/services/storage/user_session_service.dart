@@ -32,6 +32,7 @@ class UserSessionService {
   static const String _keyNumberPlate = 'number_plate';
   static const String _keyLicenseNumber = 'license_number';
   static const String _keyIsAvailable = 'is_available';
+  static const String _keyVehicleType = 'vehicle_type';
 
   // Store user/driver session data dynamically
   Future<void> saveUserSession({
@@ -42,6 +43,7 @@ class UserSessionService {
     required String role,
     required String accountStatus,
     String? imageUrl,
+    String? vehicleType,
     String? vehicleModel,
     String? vehicleColor,
     String? numberPlate,
@@ -64,6 +66,7 @@ class UserSessionService {
     }
 
     // Driver specific specs serialization
+    if (vehicleType != null) await _prefs.setString(_keyVehicleType, vehicleType);
     if (vehicleModel != null) await _prefs.setString(_keyVehicleModel, vehicleModel);
     if (vehicleColor != null) await _prefs.setString(_keyVehicleColor, vehicleColor);
     if (numberPlate != null) await _prefs.setString(_keyNumberPlate, numberPlate);
@@ -82,6 +85,7 @@ class UserSessionService {
       _keyUserRole,
       _keyAccountStatus,
       _keyUserImageUrl,
+      _keyVehicleType,
       _keyVehicleModel,
       _keyVehicleColor,
       _keyNumberPlate,
@@ -109,6 +113,7 @@ class UserSessionService {
   String? getCurrentUserImageUrl() => _prefs.getString(_keyUserImageUrl);
 
   // Driver specifics getters
+  String? getVehicleType() => _prefs.getString(_keyVehicleType);
   String? getVehicleModel() => _prefs.getString(_keyVehicleModel);
   String? getVehicleColor() => _prefs.getString(_keyVehicleColor);
   String? getNumberPlate() => _prefs.getString(_keyNumberPlate);

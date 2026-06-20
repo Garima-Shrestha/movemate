@@ -18,6 +18,7 @@ class AuthEntity extends Equatable {
   final bool? isAvailable;
   final List<double>? location; // [longitude, latitude]
   final String? vehicleType;
+  final int? tripCount;
 
   const AuthEntity({
     this.authId,
@@ -35,6 +36,7 @@ class AuthEntity extends Equatable {
     this.isAvailable,
     this.location,
     this.vehicleType,
+    this.tripCount,
   });
 
   @override
@@ -54,5 +56,6 @@ class AuthEntity extends Equatable {
     isAvailable,
     location,
     vehicleType,
+    tripCount,
   ];
 }

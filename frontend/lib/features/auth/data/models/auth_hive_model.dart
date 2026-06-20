@@ -39,6 +39,8 @@ class AuthHiveModel extends HiveObject {
   final List<double>? location;
   @HiveField(14)
   final String? vehicleType;
+  @HiveField(15)
+  final int? tripCount;
 
 
   // Constructor
@@ -58,6 +60,7 @@ class AuthHiveModel extends HiveObject {
     this.isAvailable,
     this.location,
     this.vehicleType,
+    this.tripCount,
   }) : authId = authId ?? const Uuid().v4();
 
   // From Entity
@@ -78,6 +81,7 @@ class AuthHiveModel extends HiveObject {
       isAvailable: entity.isAvailable,
       location: entity.location,
       vehicleType: entity.vehicleType,
+      tripCount: entity.tripCount,
     );
   }
 
@@ -99,6 +103,7 @@ class AuthHiveModel extends HiveObject {
       isAvailable: isAvailable,
       location: location,
       vehicleType: vehicleType,
+      tripCount: tripCount,
     );
   }
 
