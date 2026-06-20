@@ -15,6 +15,45 @@ class AuthApiModel {
   final String accountStatus;
   final String? imageUrl;
 
+  // Driver specific logistics fields
+  final String? vehicleModel;
+  final String? vehicleColor;
+  final String? numberPlate;
+  final String? licenseNumber;
+  final bool? isAvailable;
+  @JsonKey(
+    fromJson: _locationFromJson,
+    toJson: _locationToJson,
+  )
+  final List<double>? location; // [longitude, latitude]
+  final String? vehicleType;
+  final int? tripCount;
+
+
+  static List<double>? _locationFromJson(dynamic json) {
+    if (json == null) return null;
+
+    if (json is Map<String, dynamic>) {
+      final coordinates = json['coordinates'];
+
+      if (coordinates is List) {
+        return coordinates
+            .map((e) => (e as num).toDouble())
+            .toList();
+      }
+    }
+
+    return null;
+  }
+
+  static dynamic _locationToJson(List<double>? location) {
+    if (location == null) return null;
+
+    return {
+      'type': 'Point',
+      'coordinates': location,
+    };
+  }
 
   AuthApiModel({
     this.id,
@@ -25,6 +64,14 @@ class AuthApiModel {
     this.role = 'user',
     this.accountStatus = 'active',
     this.imageUrl,
+    this.vehicleModel,
+    this.vehicleColor,
+    this.numberPlate,
+    this.licenseNumber,
+    this.isAvailable,
+    this.location,
+    this.vehicleType,
+    this.tripCount,
   });
 
   // Codegen JSON Serialization methods
@@ -44,6 +91,14 @@ class AuthApiModel {
       role: role,
       accountStatus: accountStatus,
       imageUrl: imageUrl,
+      vehicleModel: vehicleModel,
+      vehicleColor: vehicleColor,
+      numberPlate: numberPlate,
+      licenseNumber: licenseNumber,
+      isAvailable: isAvailable,
+      location: location,
+      vehicleType: vehicleType,
+      tripCount: tripCount,
     );
   }
 
@@ -58,6 +113,14 @@ class AuthApiModel {
       role: entity.role,
       accountStatus: entity.accountStatus,
       imageUrl: entity.imageUrl,
+      vehicleModel: entity.vehicleModel,
+      vehicleColor: entity.vehicleColor,
+      numberPlate: entity.numberPlate,
+      licenseNumber: entity.licenseNumber,
+      isAvailable: entity.isAvailable,
+      location: entity.location,
+      vehicleType: entity.vehicleType,
+      tripCount: entity.tripCount,
     );
   }
 

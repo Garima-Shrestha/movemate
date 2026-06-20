@@ -18,6 +18,12 @@ class RegisterUsecaseParams extends Equatable {
   final String password;
   final String role; // 'user' or 'driver'
 
+  final String? vehicleModel;
+  final String? vehicleColor;
+  final String? numberPlate;
+  final String? licenseNumber;
+  final String? vehicleType;
+
   const RegisterUsecaseParams({
     required this.username,
     required this.email,
@@ -25,10 +31,15 @@ class RegisterUsecaseParams extends Equatable {
     required this.password,
     required this.role,
 
+    this.vehicleModel,
+    this.vehicleColor,
+    this.numberPlate,
+    this.licenseNumber,
+    this.vehicleType,
   });
 
   @override
-  List<Object?> get props => [username, email, phone, password, role,];
+  List<Object?> get props => [username, email, phone, password, role, vehicleModel, vehicleColor, numberPlate, licenseNumber, vehicleType,];
 }
 
 class RegisterUsecase implements UsecaseWithParams<bool, RegisterUsecaseParams> {
@@ -45,6 +56,12 @@ class RegisterUsecase implements UsecaseWithParams<bool, RegisterUsecaseParams> 
       password: params.password,
       role: params.role,
       accountStatus: 'active', // Default setup status
+
+      vehicleType: params.vehicleType,
+      vehicleModel: params.vehicleModel,
+      vehicleColor: params.vehicleColor,
+      numberPlate: params.numberPlate,
+      licenseNumber: params.licenseNumber,
     );
     return _authRepository.register(entity);
   }
