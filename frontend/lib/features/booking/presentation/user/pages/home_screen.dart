@@ -9,6 +9,9 @@ import '../../../../../config/routes/route_names.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../view_model/booking_user_view_model.dart';
 import '../view_model/selected_vehicle_provider.dart';
+import '../../../../../core/services/socket/socket_service.dart';
+import '../../../../../core/services/storage/user_session_service.dart';
+import '../view_model/booking_user_view_model.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -44,25 +47,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     },
   ];
 
+  void _connectUserSocket() {
+    final session = ref.read(userSessionServiceProvider);
+
+    final userId = session.getCurrentUserId();
+
+    if (userId == null) return;
+
+    final socketService = ref.read(socketServiceProvider);
+
+    if (!socketService.isConnected) {
+      socketService.connect(userId, "user");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _initLocation();
+    _connectUserSocket();
+
+    Future.microtask(() {
+      ref
+          .read(bookingUserViewModelProvider.notifier)
+          .getMyBookingsHistory();
+    });
   }
 
-  // Future<void> _initLocation() async {
-  //   final status = await Permission.location.request();
-  //   if (!status.isGranted) return;
-  //
-  //   final position = await Geolocator.getCurrentPosition();
-  //   if (!mounted) return;
-  //   setState(() {
-  //     _userLocation = LatLng(position.latitude, position.longitude);
-  //   });
-  //   _mapController?.animateCamera(
-  //     CameraUpdate.newLatLngZoom(_userLocation, 14),
-  //   );
-  // }
 
   Future<void> _initLocation() async {
     // check if location service is enabled first
@@ -111,6 +122,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final mapTilerKey = dotenv.env['MAPTILER_API_KEY'] ?? '';
 
+    final history = ref.watch(
+      bookingUserViewModelProvider.select(
+            (s) => s.bookingsHistory,
+      ),
+    );
+
+    final recentHistory = history.take(2).toList();
+
     // whenever socket pushes a new driver location, this runs
     ref.listen(
       bookingUserViewModelProvider.select((s) => s.driverLocation),
@@ -154,7 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   topRight: Radius.circular(50),
                 ),
               ),
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,6 +285,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ...recentHistory.map(
+                        (b) => ListTile(
+                          dense: true,
+                          visualDensity: const VisualDensity(
+                            vertical: -3,
+                          ),
+                          minVerticalPadding: 0,
+                      leading: const Icon(
+                        Icons.history,
+                        color: Colors.grey,
+                      ),
+                      title: Text(
+                        b.dropAddress,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        b.pickupAddress,
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
