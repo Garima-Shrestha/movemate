@@ -38,12 +38,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _checkSession() async {
-    await Future.delayed(const Duration(seconds: 3)); // Let logo show
+    await Future.delayed(const Duration(seconds: 3));
     if (!mounted) return;
 
     final userSession = ref.read(userSessionServiceProvider);
     if (userSession.isLoggedIn()) {
-      context.go(RouteNames.userHome);
+      final role = userSession.getCurrentUserRole();
+      if (role == 'driver') {
+        context.go(RouteNames.driverHome);
+      } else {
+        context.go(RouteNames.userHome);
+      }
     } else {
       context.go(RouteNames.onboarding);
     }
