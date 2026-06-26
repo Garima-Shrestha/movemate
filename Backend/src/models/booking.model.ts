@@ -53,6 +53,8 @@ const BookingSchema: Schema = new Schema({
     completedAt: { type: Date, default: null },
     acceptedAt: { type: Date, default: null },
     estimatedArrival: { type: Number, default: null }, // minutes
+    proofOfDeliveryImage: { type: String, default: null },
+    proofUploadedAt: { type: Date, default: null },
 }, {
     timestamps: true,
 });

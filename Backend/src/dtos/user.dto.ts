@@ -18,6 +18,7 @@ export const RegisterUserDto = UserSchema.pick(
         licenseNumber: true,
         isAvailable: true,
         location: true,
+        vehicleType: true,
     }
 )
 export type RegisterUserDto = z.infer<typeof RegisterUserDto>

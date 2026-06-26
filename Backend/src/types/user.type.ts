@@ -21,6 +21,7 @@ export const UserSchema = z.object ({
     licenseNumber: z.string().optional(),
     isAvailable: z.boolean().optional(),
     location: locationSchema.optional(),
+    vehicleType: z.enum(['tempo', 'pickup', 'truck']).optional(),
 })
 
 export type UserType = z. infer<typeof UserSchema>;

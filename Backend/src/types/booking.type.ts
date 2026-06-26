@@ -35,6 +35,9 @@ export const BookingSchema = z.object({
     completedAt: z.date().nullable().default(null),
     acceptedAt: z.date().nullable().default(null),
     estimatedArrival: z.number().nullable().default(null), // minutes
+
+    proofOfDeliveryImage: z.string().nullable().optional(),
+    proofUploadedAt: z.date().nullable().optional(),
 });
 
 export type BookingType = z.infer<typeof BookingSchema>;
