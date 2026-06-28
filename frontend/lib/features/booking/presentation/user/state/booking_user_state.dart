@@ -24,6 +24,7 @@ class BookingUserState extends Equatable {
   final int? tempoPrice;
   final int? pickupPrice;
   final int? truckPrice;
+  final String tripSubStage;
 
   const BookingUserState({
     this.status = BookingUserStatus.initial,
@@ -35,6 +36,7 @@ class BookingUserState extends Equatable {
     this.tempoPrice,
     this.pickupPrice,
     this.truckPrice,
+    this.tripSubStage = 'accepted',
   });
 
   // copyWith method to handle immutable state updates safely
@@ -48,6 +50,7 @@ class BookingUserState extends Equatable {
     int? tempoPrice,
     int? pickupPrice,
     int? truckPrice,
+    String? tripSubStage,
   }) {
     return BookingUserState(
       status: status ?? this.status,
@@ -59,9 +62,10 @@ class BookingUserState extends Equatable {
       tempoPrice: tempoPrice ?? this.tempoPrice,
       pickupPrice: pickupPrice ?? this.pickupPrice,
       truckPrice: truckPrice ?? this.truckPrice,
+      tripSubStage: tripSubStage ?? this.tripSubStage,
     );
   }
 
   @override
-  List<Object?> get props => [status, bookingsHistory, activeBooking, errorMessage, driverLocation, estimatedDistance, tempoPrice, pickupPrice, truckPrice];
+  List<Object?> get props => [status, bookingsHistory, activeBooking, errorMessage, driverLocation, estimatedDistance, tempoPrice, pickupPrice, truckPrice, tripSubStage];
 }

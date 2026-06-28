@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/services/socket/socket_service.dart';
+import '../../../domain/entities/booking_entity.dart';
 import '../../../domain/usecase/cancel_booking_usecase.dart';
 import '../../../domain/usecase/create_booking_usecase.dart';
+import '../../../domain/usecase/delete_booking_history_usecase.dart';
 import '../../../domain/usecase/estimate_booking_usecase.dart';
 import '../../../domain/usecase/get_booking_by_id_usecase.dart';
 import '../../../domain/usecase/get_my_bookings_usecase.dart';
@@ -18,6 +20,7 @@ class BookingUserViewModel extends Notifier<BookingUserState> {
   late final GetBookingByIdUsecase _getBookingByIdUsecase;
   late final CancelBookingUsecase _cancelBookingUsecase;
   late final SocketService _socketService;
+  late final RemoveBookingHistoryUsecase _removeBookingHistoryUsecase;
 
   @override
   BookingUserState build() {
@@ -27,6 +30,7 @@ class BookingUserViewModel extends Notifier<BookingUserState> {
     _getBookingByIdUsecase = ref.read(getBookingByIdUsecaseProvider);
     _cancelBookingUsecase = ref.read(cancelBookingUsecaseProvider);
     _socketService = ref.read(socketServiceProvider);
+    _removeBookingHistoryUsecase = ref.read(removeBookingHistoryUsecaseProvider);
 
     // Automatically fetch booking history lists on component mounting
     Future.microtask(() => getMyBookingsHistory());
@@ -176,6 +180,7 @@ class BookingUserViewModel extends Notifier<BookingUserState> {
           status: BookingUserStatus.bookingCancelled,
           activeBooking: cancelledBooking,
           errorMessage: null,
+          tripSubStage: 'accepted',
         );
       },
     );
@@ -229,6 +234,51 @@ class BookingUserViewModel extends Notifier<BookingUserState> {
       },
     );
   }
+
+  Future<void> rebook(BookingEntity booking) async {
+    await createBooking(
+      vehicleType: booking.vehicleType,
+      pickupCoordinates: booking.pickupCoordinates,
+      dropCoordinates: booking.dropCoordinates,
+      goodsTypes: booking.goodsTypes,
+      pickupAddress: booking.pickupAddress,
+      dropAddress: booking.dropAddress,
+    );
+  }
+
+
+  Future<void> removeFromHistory(
+      String bookingId,
+      ) async {
+    final result =
+    await _removeBookingHistoryUsecase(
+      RemoveBookingHistoryParams(
+        bookingId: bookingId,
+      ),
+    );
+
+    result.fold(
+          (failure) {
+        state = state.copyWith(
+          errorMessage: failure.message,
+        );
+      },
+          (_) {
+        state = state.copyWith(
+          bookingsHistory: state.bookingsHistory
+              .where(
+                (b) => b.bookingId != bookingId,
+          )
+              .toList(),
+        );
+      },
+    );
+  }
+
+  void updateTripSubStage(String stage) {
+    state = state.copyWith(tripSubStage: stage);
+  }
+
 
   // State Management Utility Closures
   void clearActiveTrip() {
