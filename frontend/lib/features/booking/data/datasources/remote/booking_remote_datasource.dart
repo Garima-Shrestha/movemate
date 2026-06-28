@@ -190,6 +190,27 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
     throw Exception(response.data['message'] ?? "Failed to start trip");
   }
 
+  Future<void> driverGoodsPickedUp(String bookingId) async {
+    final token = _tokenService.getToken();
+    await _apiClient.post(
+      ApiEndpoints.driverGoodsPickedUp(bookingId),
+      options: Options(headers: {
+        if (token != null) "Authorization": "Bearer $token",
+      }),
+    );
+  }
+
+  @override
+  Future<void> driverArrivedAtPickup(String bookingId) async {
+    final token = _tokenService.getToken();
+    await _apiClient.post(
+      ApiEndpoints.driverArrivedAtPickup(bookingId),
+      options: Options(headers: {
+        if (token != null) "Authorization": "Bearer $token",
+      }),
+    );
+  }
+
   @override
   Future<dynamic> driverCompleteTrip(String bookingId) async {
     final token = _tokenService.getToken();
@@ -214,5 +235,55 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
     );
     if (response.data['success'] == true) return response.data['data'];
     throw Exception(response.data['message'] ?? "Failed to cancel booking");
+  }
+
+  @override
+  Future<dynamic> uploadProofOfDelivery(
+      String bookingId,
+      String imagePath,
+      ) async {
+    final token = _tokenService.getToken();
+
+    final formData = FormData.fromMap({
+      'image': await MultipartFile.fromFile(
+        imagePath,
+      ),
+    });
+
+    final response = await _apiClient.post(
+      ApiEndpoints.uploadProofOfDelivery(
+        bookingId,
+      ),
+      data: formData,
+      options: Options(
+        headers: {
+          if (token != null)
+            "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.data['success'] == true) {
+      return response.data['data'];
+    }
+
+    throw Exception(
+      response.data['message'] ??
+          "Failed to upload proof",
+    );
+  }
+
+  @override
+  Future<void> removeFromHistory(String bookingId) async {
+    final token = _tokenService.getToken();
+
+    await _apiClient.delete(
+      ApiEndpoints.deleteBookingHistory(bookingId),
+      options: Options(
+        headers: {
+          if (token != null) "Authorization": "Bearer $token",
+        },
+      ),
+    );
   }
 }

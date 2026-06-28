@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../auth/data/models/auth_api_model.dart';
+import '../../../auth/domain/entities/auth_entity.dart';
 import '../../domain/entities/booking_entity.dart';
 
 part 'booking_api_model.g.dart';
@@ -24,6 +26,9 @@ class BookingApiModel {
   final String? pickupAddress;
   final String? dropAddress;
 
+  final String? proofOfDeliveryImage;
+  final DateTime? proofUploadedAt;
+
   final DateTime? startedAt;
   final DateTime? completedAt;
   final DateTime? acceptedAt;
@@ -45,6 +50,8 @@ class BookingApiModel {
     this.dropLocation,
     this.pickupAddress,
     this.dropAddress,
+    this.proofOfDeliveryImage,
+    this.proofUploadedAt,
     this.startedAt,
     this.completedAt,
     this.acceptedAt,
@@ -63,9 +70,37 @@ class BookingApiModel {
   BookingEntity toEntity() {
     return BookingEntity(
       bookingId: id,
+
       // Helper to handle Mongoose populated objects
-      user: null, // Note: You would map the 'userId' object here if populated
-      driver: null, // Note: You would map the 'driverId' object here if populated
+      user: userId is Map<String, dynamic>
+          ? AuthEntity(
+        authId: userId['_id'] as String?,
+        username: userId['username'] as String? ?? '',
+        email: userId['email'] as String? ?? '',
+        phone: userId['phone'] as String? ?? '',
+        role: userId['role'] as String? ?? 'user',
+        accountStatus: userId['accountStatus'] as String? ?? 'active',
+      )
+          : null,
+
+      driver: driverId is Map<String, dynamic>
+          ? AuthEntity(
+        authId: driverId['_id'] as String?,
+        username: driverId['username'] as String? ?? '',
+        email: driverId['email'] as String? ?? '',
+        phone: driverId['phone'] as String? ?? '',
+        role: driverId['role'] as String? ?? 'driver',
+        accountStatus: driverId['accountStatus'] as String? ?? 'active',
+        vehicleModel: driverId['vehicleModel'] as String?,
+        vehicleColor: driverId['vehicleColor'] as String?,
+        numberPlate: driverId['numberPlate'] as String?,
+        vehicleType: driverId['vehicleType'] as String?,
+        tripCount: driverId['tripCount'] as int?,
+      )
+          : null,
+
+      // user: null, // Note: You would map the 'userId' object here if populated
+      // driver: null, // Note: You would map the 'driverId' object here if populated
       vehicleType: vehicleType,
       goodsTypes: goodsTypes,
       status: status,
@@ -80,6 +115,8 @@ class BookingApiModel {
           .toList() ?? [],
       pickupAddress: pickupAddress ?? '',
       dropAddress: dropAddress ?? '',
+      proofOfDeliveryImage: proofOfDeliveryImage,
+      proofUploadedAt: proofUploadedAt,
       startedAt: startedAt,
       completedAt: completedAt,
       acceptedAt: acceptedAt,
@@ -103,6 +140,8 @@ class BookingApiModel {
       dropLocation: {'type': 'Point', 'coordinates': entity.dropCoordinates},
       pickupAddress: entity.pickupAddress,
       dropAddress: entity.dropAddress,
+      proofOfDeliveryImage: entity.proofOfDeliveryImage,
+      proofUploadedAt: entity.proofUploadedAt,
       startedAt: entity.startedAt,
       completedAt: entity.completedAt,
       acceptedAt: entity.acceptedAt,

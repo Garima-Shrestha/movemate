@@ -23,6 +23,10 @@ BookingApiModel _$BookingApiModelFromJson(Map<String, dynamic> json) =>
       dropLocation: json['dropLocation'] as Map<String, dynamic>?,
       pickupAddress: json['pickupAddress'] as String?,
       dropAddress: json['dropAddress'] as String?,
+      proofOfDeliveryImage: json['proofOfDeliveryImage'] as String?,
+      proofUploadedAt: json['proofUploadedAt'] == null
+          ? null
+          : DateTime.parse(json['proofUploadedAt'] as String),
       startedAt: json['startedAt'] == null
           ? null
           : DateTime.parse(json['startedAt'] as String),
@@ -56,6 +60,8 @@ Map<String, dynamic> _$BookingApiModelToJson(BookingApiModel instance) =>
       'dropLocation': instance.dropLocation,
       'pickupAddress': instance.pickupAddress,
       'dropAddress': instance.dropAddress,
+      'proofOfDeliveryImage': instance.proofOfDeliveryImage,
+      'proofUploadedAt': instance.proofUploadedAt?.toIso8601String(),
       'startedAt': instance.startedAt?.toIso8601String(),
       'completedAt': instance.completedAt?.toIso8601String(),
       'acceptedAt': instance.acceptedAt?.toIso8601String(),
