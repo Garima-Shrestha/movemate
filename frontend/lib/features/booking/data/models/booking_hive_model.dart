@@ -65,6 +65,12 @@ class BookingHiveModel extends HiveObject {
   @HiveField(18)
   final String dropAddress;
 
+  @HiveField(19)
+  final String? proofOfDeliveryImage;
+
+  @HiveField(20)
+  final DateTime? proofUploadedAt;
+
   BookingHiveModel({
     String? bookingId,
     this.user,
@@ -78,6 +84,8 @@ class BookingHiveModel extends HiveObject {
     required this.goodsTypes,
     required this.pickupAddress,
     required this.dropAddress,
+    this.proofOfDeliveryImage,
+    this.proofUploadedAt,
     this.cancelledBy,
     this.startedAt,
     this.completedAt,
@@ -102,6 +110,8 @@ class BookingHiveModel extends HiveObject {
       goodsTypes: entity.goodsTypes,
       pickupAddress: entity.pickupAddress,
       dropAddress: entity.dropAddress,
+      proofOfDeliveryImage: entity.proofOfDeliveryImage,
+      proofUploadedAt: entity.proofUploadedAt,
       cancelledBy: entity.cancelledBy,
       startedAt: entity.startedAt,
       completedAt: entity.completedAt,
@@ -127,6 +137,8 @@ class BookingHiveModel extends HiveObject {
       goodsTypes: goodsTypes,
       pickupAddress: pickupAddress,
       dropAddress: dropAddress,
+      proofOfDeliveryImage: proofOfDeliveryImage,
+      proofUploadedAt: proofUploadedAt,
       cancelledBy: cancelledBy,
       startedAt: startedAt,
       completedAt: completedAt,

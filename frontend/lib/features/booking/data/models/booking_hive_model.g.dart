@@ -29,6 +29,8 @@ class BookingHiveModelAdapter extends TypeAdapter<BookingHiveModel> {
       goodsTypes: (fields[9] as List).cast<String>(),
       pickupAddress: fields[17] as String,
       dropAddress: fields[18] as String,
+      proofOfDeliveryImage: fields[19] as String?,
+      proofUploadedAt: fields[20] as DateTime?,
       cancelledBy: fields[10] as String?,
       startedAt: fields[11] as DateTime?,
       completedAt: fields[12] as DateTime?,
@@ -42,7 +44,7 @@ class BookingHiveModelAdapter extends TypeAdapter<BookingHiveModel> {
   @override
   void write(BinaryWriter writer, BookingHiveModel obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(21)
       ..writeByte(0)
       ..write(obj.bookingId)
       ..writeByte(1)
@@ -80,7 +82,11 @@ class BookingHiveModelAdapter extends TypeAdapter<BookingHiveModel> {
       ..writeByte(17)
       ..write(obj.pickupAddress)
       ..writeByte(18)
-      ..write(obj.dropAddress);
+      ..write(obj.dropAddress)
+      ..writeByte(19)
+      ..write(obj.proofOfDeliveryImage)
+      ..writeByte(20)
+      ..write(obj.proofUploadedAt);
   }
 
   @override

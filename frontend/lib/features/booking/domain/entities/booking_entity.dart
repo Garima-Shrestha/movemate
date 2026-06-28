@@ -21,6 +21,8 @@ class BookingEntity extends Equatable {
   final DateTime? updatedAt;
   final String pickupAddress;
   final String dropAddress;
+  final String? proofOfDeliveryImage;
+  final DateTime? proofUploadedAt;
 
 
   const BookingEntity({
@@ -36,6 +38,8 @@ class BookingEntity extends Equatable {
     required this.goodsTypes,
     required this.pickupAddress,
     required this.dropAddress,
+    this.proofOfDeliveryImage,
+    this.proofUploadedAt,
     this.cancelledBy,
     this.startedAt,
     this.completedAt,
@@ -59,6 +63,8 @@ class BookingEntity extends Equatable {
     goodsTypes,
     pickupAddress,
     dropAddress,
+    proofOfDeliveryImage,
+    proofUploadedAt,
     cancelledBy,
     startedAt,
     completedAt,
