@@ -6,7 +6,7 @@ class ApiEndpoints {
 
   // Configuration toggles for local environment execution
   static const bool isPhysicalDevice = true;
-  static const String _ipAddress = '192.168.48.1';
+  static const String _ipAddress = '192.168.0.104';
   static const int _backendPort = 5050;
 
   // Base Dynamic URL Routing
@@ -47,6 +47,9 @@ class ApiEndpoints {
   // Functions to insert the booking ID dynamically into the URL string
   static String getBookingByIdUrl(String id) => '$baseBookings/$id';
   static String getCancelBookingUrl(String id) => '$baseBookings/$id/cancel';
+  static String uploadProofOfDelivery(String id) => '$baseBookings/$id/proof';
+  static String deleteBookingHistory(String id) => '$baseBookings/$id';
+  static const String updateUserProfile = '/api/auth/update-profile';
 
 
   // ------------------- DRIVER BOOKING WORKFLOWS -------------------
@@ -57,8 +60,10 @@ class ApiEndpoints {
   static const String driverStats = '/api/driver/stats';
 
   // Functions to insert the booking ID dynamically into the driver action paths
-  static String driverAcceptBookingUrl(String id) => '$driverBookings/$id/accept';
-  static String driverStartTripUrl(String id) => '$driverBookings/$id/start';
-  static String driverCompleteTripUrl(String id) => '$driverBookings/$id/complete';
-  static String driverCancelBookingUrl(String id) => '$driverBookings/$id/cancel';
+  static String driverAcceptBooking(String id) => '/api/driver/bookings/$id/accept';
+  static String driverStartTrip(String id) => '/api/driver/bookings/$id/start';
+  static String driverArrivedAtPickup(String id) => '/api/driver/bookings/$id/arrived';
+  static String driverGoodsPickedUp(String id) => '/api/driver/bookings/$id/picked-up';
+  static String driverCompleteTrip(String id) => '/api/driver/bookings/$id/complete';
+  static String driverCancelBooking(String id) => '/api/driver/bookings/$id/cancel';
 }

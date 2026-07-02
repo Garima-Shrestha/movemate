@@ -33,6 +33,7 @@ class UserSessionService {
   static const String _keyLicenseNumber = 'license_number';
   static const String _keyIsAvailable = 'is_available';
   static const String _keyVehicleType = 'vehicle_type';
+  static const String _keyTripCount      = 'trip_count';
 
   // Store user/driver session data dynamically
   Future<void> saveUserSession({
@@ -49,6 +50,7 @@ class UserSessionService {
     String? numberPlate,
     String? licenseNumber,
     bool? isAvailable,
+    int? tripCount,
   }) async {
     await _prefs.setBool(_keyIsLoggedIn, true);
     await _prefs.setString(_keyUserId, userId);
@@ -72,6 +74,7 @@ class UserSessionService {
     if (numberPlate != null) await _prefs.setString(_keyNumberPlate, numberPlate);
     if (licenseNumber != null) await _prefs.setString(_keyLicenseNumber, licenseNumber);
     if (isAvailable != null) await _prefs.setBool(_keyIsAvailable, isAvailable);
+    if (tripCount != null) await _prefs.setInt(_keyTripCount, tripCount);
   }
 
   // Clear User Sessions Data completely on sign out
@@ -91,6 +94,7 @@ class UserSessionService {
       _keyNumberPlate,
       _keyLicenseNumber,
       _keyIsAvailable,
+      _keyTripCount,
     };
 
     for (final key in keys) {
@@ -119,4 +123,5 @@ class UserSessionService {
   String? getNumberPlate() => _prefs.getString(_keyNumberPlate);
   String? getLicenseNumber() => _prefs.getString(_keyLicenseNumber);
   bool? getIsAvailable() => _prefs.getBool(_keyIsAvailable);
+  int? getTripCount() => _prefs.getInt(_keyTripCount);
 }

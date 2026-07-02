@@ -144,10 +144,14 @@ class ApiClient {
         Options? options,
         ProgressCallback? onSendProgress,
       }) async {
+    final mergedOptions = Options(
+      contentType: 'multipart/form-data',
+      headers: options?.headers,
+    );
     return _dio.put(
       path,
       data: formData,
-      options: options,
+      options: mergedOptions,
       onSendProgress: onSendProgress,
     );
   }

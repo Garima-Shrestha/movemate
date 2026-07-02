@@ -32,6 +32,14 @@ class SocketService {
 
       _socket!.emit('joinRoom', {'userId': userId, 'role': role});
     });
+
+    _socket!.onDisconnect((_) {
+      print("SOCKET DISCONNECTED");
+    });
+
+    _socket!.onReconnect((_) {
+      print("SOCKET RECONNECTED");
+    });
   }
 
   void on(String event, Function(dynamic) handler) {
