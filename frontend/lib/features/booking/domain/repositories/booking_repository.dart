@@ -8,6 +8,7 @@ abstract interface class IBookingRepository {
   Future<Either<Failure, List<BookingEntity>>> getMyBookings();
   Future<Either<Failure, BookingEntity>> getBookingById(String bookingId);
   Future<Either<Failure, BookingEntity>> cancelBooking(String bookingId);
+  Future<Either<Failure, void>> removeFromHistory(String bookingId);
 
   // Driver
   Future<Either<Failure, Map<String, dynamic>>> getDriverStats();

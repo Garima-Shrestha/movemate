@@ -81,7 +81,14 @@ class BookingRepository implements IBookingRepository {
 
         // Loop through the list of maps and parse them into clean UI Entities
         final List<BookingEntity> historyList = rawJsonList
-            .map((json) => BookingApiModel.fromJson(json as Map<String, dynamic>).toEntity())
+            .map((json) {
+          try {
+            return BookingApiModel.fromJson(json as Map<String, dynamic>).toEntity();
+          } catch (e) {
+            return null;
+          }
+        })
+            .whereType<BookingEntity>()
             .toList();
 
         return Right(historyList);
@@ -210,6 +217,40 @@ class BookingRepository implements IBookingRepository {
         ApiFailure(
           message:
           "Internet connection required for price estimation",
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeFromHistory(
+      String bookingId,
+      ) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        await _bookingRemoteDataSource.removeFromHistory(
+          bookingId,
+        );
+
+        return const Right(null);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message:
+            e.response?.data['message'] ??
+                'Failed to remove booking',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(
+          ApiFailure(message: e.toString()),
+        );
+      }
+    } else {
+      return const Left(
+        ApiFailure(
+          message: "Internet connection required",
         ),
       );
     }
